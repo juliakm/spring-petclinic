@@ -39,4 +39,4 @@ steps:
     azureSubscription: $(serviceConnectionToAzure)
     appType: 'webAppLinux'
     WebAppName: $(appName)
-    packageForLinux: $(build.artifactstagingdirectory)/**/*.zip
+    packageForLinux: '$(System.DefaultWorkingDirectory)/'
