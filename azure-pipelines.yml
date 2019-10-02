@@ -33,9 +33,8 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
 
 - task: AzureWebApp@1
-  displayName: Azure Web App Deploy
   inputs:
     azureSubscription: 'connection-to-spring-petclinic-julia'
     appType: 'webAppLinux'
     appName: 'spring-petclinic-julia'
-    package: '$(build.artifactstagingdirectory)/**/*.zip'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
