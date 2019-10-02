@@ -21,22 +21,21 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-- task: CopyFiles@2
+- task: ArchiveFiles@1
+  displayName: Archive files
   inputs:
-    SourceFolder: '$(build.sourcesdirectory)'
-    Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    rootFolder: $(System.DefaultWorkingDirectory)
+    includeRootFolder: false
+    archiveType: zip
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
 
-- task: AzureRmWebAppDeployment@4
+- task: AzureWebApp@1
+  displayName: Azure Web App Deploy
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: $(serviceConnectionToAzure)
+    azureSubscription: 'connection-to-spring-petclinic-julia'
     appType: 'webAppLinux'
-    WebAppName: $(appName)
-    packageForLinux: '$(System.DefaultWorkingDirectory)/'
+    appName: 'spring-petclinic-julia'
+    package: '$(build.artifactstagingdirectory)/**/*.zip'
