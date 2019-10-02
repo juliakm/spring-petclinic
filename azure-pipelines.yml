@@ -39,4 +39,4 @@ steps:
     azureSubscription: 'connection-to-spring-petclinic-julia'
     appType: 'webAppLinux'
     WebAppName: 'spring-petclinic-julia'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/'
