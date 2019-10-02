@@ -36,7 +36,7 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'connection-to-spring-petclinic-julia'
+    azureSubscription: $(serviceConnectionToAzure)
     appType: 'webAppLinux'
-    WebAppName: 'spring-petclinic-julia'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/'
+    WebAppName: $(appName)
+    packageForLinux: $(build.artifactstagingdirectory)/**/*.zip
