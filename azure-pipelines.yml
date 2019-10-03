@@ -3,6 +3,11 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
+variables: 
+  ## Add this under variables section in the pipeline
+  azureSubscription: 'connection-to-spring-petclinic-julia'
+  appName: 'spring-petclinic-julia'
+
 trigger:
 - master
 
@@ -29,7 +34,7 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: 'connection-to-spring-petclinic-julia'
+    azureSubscription: $(azureSubscription)
     appType: 'webAppLinux'
-    appName: 'spring-petclinic-julia'
+    appName: $(appName)
     package: '$(System.ArtifactsDirectory)/**/*.?(war|jar)'
