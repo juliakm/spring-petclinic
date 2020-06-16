@@ -32,9 +32,10 @@ steps:
     Contents: '**/target/*.?(war|jar)'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: $(azureSubscription)
-    appType: 'webAppLinux'
-    appName: $(appName)
-    package: '$(System.ArtifactsDirectory)/**/*.?(war|jar)'
+# - task: AzureWebApp@1
+#   inputs:
+#     azureSubscription: $(azureSubscription)
+#     appType: 'webAppLinux'
+#     appName: $(appName)
+#     package: '$(System.ArtifactsDirectory)/**/*.?(war|jar)'
+
