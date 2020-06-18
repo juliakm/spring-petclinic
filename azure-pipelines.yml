@@ -5,7 +5,7 @@
 
 variables: 
   ## Add this under variables section in the pipeline
-  azureSubscription: 'connection-to-spring-petclinic-julia'
+  azureSubscription: 'vmss-resource-group'
   appName: 'spring-petclinic-julia'
 
 trigger:
