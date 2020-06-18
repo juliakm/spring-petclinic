@@ -32,6 +32,7 @@ steps:
     Contents: '**/target/*.?(war|jar)'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
+
 # - task: AzureWebApp@1
 #   inputs:
 #     azureSubscription: $(azureSubscription)
