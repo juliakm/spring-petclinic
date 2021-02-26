@@ -30,5 +30,5 @@ jobs:
        #       & 'c:\webApp\webconfig.ps1'
 
         dist-type: 'SharedImageGallery'
-        dist-resource-id: '/subscriptions/82c135d4-f813-4bec-a93e-60e4323918ee/resourceGroups/ghactions-vMimage/providers/Microsoft.Compute/galleries/appImageGallery/images/AppBakedVMs/versions/0.1.${{ GITHUB.RUN_ID }}' #Replace with the resource id of your shared image  gallery's image definition
+        dist-resource-id: '/subscriptions/82c135d4-f813-4bec-a93e-60e4323918ee/resourceGroups/ghactions-vMimage/providers/Microsoft.Compute/galleries/ghactions_gallery/images/ghActions-windows/versions/0.1.${{ GITHUB.RUN_ID }}' #Replace with the resource id of your shared image  gallery's image definition
         dist-location: 'eastus2'
