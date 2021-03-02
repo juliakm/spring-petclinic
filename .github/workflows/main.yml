@@ -18,36 +18,43 @@ jobs:
       with:
         java-version: '1.8.x'
         
-    - name: Build with Maven
-      run: mvn package --file pom.xml
-   
-   
-    - name: CREATE APP BAKED VM IMAGE
-      id: imageBuilder
-      uses: azure/build-vm-image@v0
+    - name: Build Java
+      run: mvn --batch-mode --update-snapshots verify
+
+    - run: mkdir staging && cp target/*.jar staging
+    - uses: actions/upload-artifact@v2
       with:
-        location: 'eastus2'
-        resource-group-name: 'ghactions-vMimage'
-        managed-identity: 'ghActionsidentity' # Managed identity as mentioned in pre-requisites.
+        name: Package
+        path: staging
 
-        source-os-type: 'windows'
-        source-image-type: 'platformImage'
-        source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest #unique  identitifier of source image
+   # - name: Build with Maven
+  #    run: mvn package --file pom.xml
+      
+    # The desired behavior if no files are found using the provided path.
 
-#       customizer-source: ${{ GITHUB.WORKSPACE }}  # This folder gets copied tothe   image at location C:\
-#        # customizer-script: |
-#        #       & 'c:\webApp\webconfig.ps1'
+   
+#     - name: CREATE APP BAKED VM IMAGE
+#       id: imageBuilder
+#       uses: azure/build-vm-image@v0
+#       with:
+#         location: 'eastus2'
+#         resource-group-name: 'ghactions-vMimage'
+#         managed-identity: 'ghActionsidentity' # Managed identity as mentioned in pre-requisites.
 
-        dist-type: 'SharedImageGallery'
-        dist-resource-id: '/subscriptions/82c135d4-f813-4bec-a93e-60e4323918ee/resourceGroups/ghactions-vMimage/providers/Microsoft.Compute/galleries/ghactions_gallery/images/ghActions-windows/versions/0.1.${{ GITHUB.RUN_ID }}' #Replace with the resource id of your shared image  gallery's image definition
-        dist-location: 'eastus2'
+#         source-os-type: 'windows'
+#         source-image-type: 'platformImage'
+#         source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest #unique  identitifier of source image
+
+#         dist-type: 'SharedImageGallery'
+#         dist-resource-id: '/subscriptions/82c135d4-f813-4bec-a93e-60e4323918ee/resourceGroups/ghactions-vMimage/providers/Microsoft.Compute/galleries/ghactions_gallery/images/ghActions-windows/versions/0.1.${{ GITHUB.RUN_ID }}' #Replace with the resource id of your shared image  gallery's image definition
+#         dist-location: 'eastus2'
         
-    - name: CREATE VM
-      uses: azure/CLI@v1
-      with:
-        azcliversion: 2.0.72
-        inlineScript: |
-          az vm create --resource-group ghactions-vMimage  --name "app-vm-${{ GITHUB.RUN_NUMBER }}"  --admin-username myuser --admin-password "${{ secrets.VM_PWD }}" --location  eastus2 \
-              --image "${{ steps.imageBuilder.outputs.custom-image-uri }}"              
+#     - name: CREATE VM
+#       uses: azure/CLI@v1
+#       with:
+#         azcliversion: 2.0.72
+#         inlineScript: |
+#           az vm create --resource-group ghactions-vMimage  --name "app-vm-${{ GITHUB.RUN_NUMBER }}"  --admin-username myuser --admin-password "${{ secrets.VM_PWD }}" --location  eastus2 \
+#               --image "${{ steps.imageBuilder.outputs.custom-image-uri }}"              
         
 
