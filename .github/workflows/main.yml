@@ -34,7 +34,7 @@ jobs:
         source-image-type: 'platformImage'
         source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest #unique  identitifier of source image
 
-        customizer-source: ${{ GITHUB.WORKSPACE }}  # This folder gets copied tothe   image at location C:\
+#       customizer-source: ${{ GITHUB.WORKSPACE }}  # This folder gets copied tothe   image at location C:\
 #        # customizer-script: |
 #        #       & 'c:\webApp\webconfig.ps1'
 
