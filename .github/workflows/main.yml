@@ -37,7 +37,7 @@ jobs:
         source-os-type: 'windows'
         source-image-type: 'platformImage'
         source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest #unique  identitifier of source image
-        customizer-source: ${{ GITHUB.WORKSPACE }}/**
+        customizer-source: '${{ GITHUB.WORKSPACE }}/**.zip'
         dist-type: 'SharedImageGallery'
         dist-resource-id: '/subscriptions/82c135d4-f813-4bec-a93e-60e4323918ee/resourceGroups/ghactions-vMimage/providers/Microsoft.Compute/galleries/ghactions_gallery/images/ghActions-windows/versions/0.1.${{ GITHUB.RUN_ID }}' #Replace with the resource id of your shared image  gallery's image definition
         dist-location: 'eastus2'
