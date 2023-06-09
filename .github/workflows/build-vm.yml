@@ -1,0 +1,12 @@
+on: [push]
+
+name: Create Custom VM Image
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
