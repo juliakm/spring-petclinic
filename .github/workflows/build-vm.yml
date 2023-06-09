@@ -4,20 +4,33 @@ name: Create Custom VM Image
 
 jobs:
   build-image:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17' ]
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v2    
+      uses: actions/checkout@v3    
 
     - name: Login via Az module
       uses: azure/login@v1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
 
-    - name: Setup Java 1.8.x
-      uses: actions/setup-java@v1
+    - name: Set up JDK ${{matrix.java}}
+      uses: actions/setup-java@v2
       with:
-        java-version: '1.8.x'
+        java-version: ${{matrix.java}}
+        distribution: 'adopt'
+        cache: maven
+    - name: Build with Maven Wrapper
+      run: ./mvnw -B package
+        
+#     - name: Setup Java 1.8.x
+#       uses: actions/setup-java@v1
+#       with:
+#         java-version: '1.8.x'
         
     - name: Build Java
       run: mvn --batch-mode --update-snapshots verify
