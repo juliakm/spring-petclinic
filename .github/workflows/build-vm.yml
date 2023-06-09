@@ -4,9 +4,26 @@ name: Create Custom VM Image
 
 jobs:
   build-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest    
     steps:
-      - name: Log in with Azure
-        uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    - name: Checkout
+      uses: actions/checkout@v2    
+
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+
+    - name: Setup Java 1.8.x
+      uses: actions/setup-java@v1
+      with:
+        java-version: '1.8.x'
+        
+    - name: Build Java
+      run: mvn --batch-mode --update-snapshots verify
+
+    - run: mkdir staging && cp target/*.jar staging
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: staging
