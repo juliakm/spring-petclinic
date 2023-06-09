@@ -40,3 +40,17 @@ jobs:
       with:
         name: Package
         path: staging
+        
+    - name: Create App Baked Image
+      id: imageBuilder
+      uses: azure/build-vm-image@v0
+      with:
+        location: 'eastus'
+        resource-group-name: 'identitygha-group'
+        managed-identity: 'identityghatutorial' # Managed identity
+        source-os-type: 'windows'
+        source-image-type: 'platformImage'
+        source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest #unique identifier of source image
+        dist-type: 'SharedImageGallery'
+        dist-resource-id: '/subscriptions/82c135d4-f813-4bec-a93e-60e4323918ee/resourceGroups/identitygha-group/providers/Microsoft.Compute/galleries/myGallery/images/image2019/versions/0.1.${{ GITHUB.RUN_ID }}' #Replace with the resource id of your shared image  gallery's image definition
+        dist-location: 'eastus2'
