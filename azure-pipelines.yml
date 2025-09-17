@@ -45,10 +45,12 @@ stages:
               inputs:
                 targetType: 'inline'
                 script: |
-                  # Modify deployment script based on the app type
-                  echo "Starting deployment script run"
-                  sudo java -jar $(Pipeline.Workspace)/drop/target/*.jar
+                  JAR_PATH=$(ls $(Pipeline.Workspace)/drop/target/*.jar | head -n 1)
+                  java -jar "$JAR_PATH" &
+                  JAR_PID=$!
 
+                  sleep 30
+                  kill $JAR_PID
           routeTraffic:
             steps:
             - script: echo routing traffic
