@@ -45,12 +45,12 @@ stages:
               inputs:
                 targetType: 'inline'
                 script: |
-                  JAR_PATH=$(ls $(Pipeline.Workspace)/drop/target/*.jar | head -n 1)
-                  java -jar "$JAR_PATH" &
-                  JAR_PID=$!
+                  JAR=$(ls $(Pipeline.Workspace)/drop/target/*.jar | head -n 1)
+                  java -jar "$JAR" --server.port=8081 &
+                  PID=$!
+                  sleep 15
+                  kill $PID 2>/dev/null || echo "Process already exited"
 
-                  sleep 30
-                  kill $JAR_PID
           routeTraffic:
             steps:
             - script: echo routing traffic
