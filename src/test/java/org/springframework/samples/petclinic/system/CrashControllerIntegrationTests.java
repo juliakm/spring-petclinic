@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2019 the original author or authors.
+ * Copyright 2012-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -49,12 +50,6 @@ import org.springframework.http.ResponseEntity;
 		properties = { "server.error.include-message=ALWAYS", "management.endpoints.enabled-by-default=false" })
 class CrashControllerIntegrationTests {
 
-	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
-			DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
-	static class TestConfiguration {
-
-	}
-
 	@Value(value = "${local.server.port}")
 	private int port;
 
@@ -68,10 +63,10 @@ class CrashControllerIntegrationTests {
 				new ParameterizedTypeReference<Map<String, Object>>() {
 				});
 		assertThat(resp).isNotNull();
-		assertThat(resp.getStatusCode().is5xxServerError());
-		assertThat(resp.getBody().containsKey("timestamp"));
-		assertThat(resp.getBody().containsKey("status"));
-		assertThat(resp.getBody().containsKey("error"));
+		assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+		assertThat(resp.getBody()).containsKey("timestamp");
+		assertThat(resp.getBody()).containsKey("status");
+		assertThat(resp.getBody()).containsKey("error");
 		assertThat(resp.getBody()).containsEntry("message",
 				"Expected: controller used to showcase what happens when an exception is thrown");
 		assertThat(resp.getBody()).containsEntry("path", "/oups");
@@ -84,7 +79,7 @@ class CrashControllerIntegrationTests {
 		ResponseEntity<String> resp = rest.exchange("http://localhost:" + port + "/oups", HttpMethod.GET,
 				new HttpEntity<>(headers), String.class);
 		assertThat(resp).isNotNull();
-		assertThat(resp.getStatusCode().is5xxServerError());
+		assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 		assertThat(resp.getBody()).isNotNull();
 		// html:
 		assertThat(resp.getBody()).containsSubsequence("<body>", "<h2>", "Something happened...", "</h2>", "<p>",
@@ -93,6 +88,12 @@ class CrashControllerIntegrationTests {
 		// Not the whitelabel error page:
 		assertThat(resp.getBody()).doesNotContain("Whitelabel Error Page",
 				"This application has no explicit mapping for");
+	}
+
+	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
+			DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+	static class TestConfiguration {
+
 	}
 
 }
