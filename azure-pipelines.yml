@@ -23,3 +23,11 @@ stages:
         TargetFolder: $(Build.ArtifactStagingDirectory)
     - upload: $(Build.ArtifactStagingDirectory)
       artifact: drop
+- stage: Deploy
+  displayName: Deploy to Environment
+  jobs:
+  - deployment: VMDeploy
+    displayName: Web deploy
+    environment:
+      name: Java
+      resourceType: VirtualMachine
