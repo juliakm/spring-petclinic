@@ -48,9 +48,8 @@ stages:
                   JAR=$(ls $(Pipeline.Workspace)/drop/target/*.jar | head -n 1)
                   java -jar "$JAR" --server.port=8081 &
                   PID=$!
-                  sleep 15
-                  kill $PID 2>/dev/null || echo "Process already exited"
-
+                  server.shutdown=graceful
+                  spring.lifecycle.timeout-per-shutdown-phase=30s
           routeTraffic:
             steps:
             - script: echo routing traffic
