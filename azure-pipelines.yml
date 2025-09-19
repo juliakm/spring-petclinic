@@ -49,8 +49,7 @@ stages:
                   java -jar "$JAR" --server.port=8081 &
                   PID=$!
                   sleep 15
-                  server.shutdown=graceful
-                  spring.lifecycle.timeout-per-shutdown-phase=30s
+                  kill $PID 2>/dev/null || echo "Process already exited"
           routeTraffic:
             steps:
             - script: echo routing traffic
